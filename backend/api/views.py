@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
+from .models import Surah
 
 User = get_user_model()
 
@@ -19,12 +20,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 def quran_surahs(request):
-    surahs = [
-        {"id": 1, "name": "Al-Fatiha", "verses": 7},
-        {"id": 2, "name": "Al-Baqarah", "verses": 286},
-        {"id": 3, "name": "Al-Imran", "verses": 200},
-    ]
-    return JsonResponse(surahs, safe=False)
+    surahs = Surah.objects.all().values("id", "number", "name", "verses")
+    return JsonResponse(list(surahs), safe=False)
+
 def register_page(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
