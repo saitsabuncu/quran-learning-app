@@ -72,10 +72,6 @@ class AdminOnlyView(APIView):
             return Response({"error": "Yetkiniz yok!"}, status=403)
 
         return Response({"message": "Admin paneline hoş geldiniz!"})    
-    
-
-
-
 
 
 @api_view(["POST"])
@@ -122,3 +118,4 @@ def unmemorize_surah(request):
 
     memorized.delete()
     return Response({"message": "Sure ezberden kaldırıldı!"})
+

@@ -5,7 +5,7 @@ from .views import quran_surahs
 from .views import register_page, login_page, logout_page
 from .views import UserProfileView
 from .views import AdminOnlyView
-from .views import mark_memorized
+
 from .views import memorize_surah, get_memorized_surahs, unmemorize_surah
 
 urlpatterns = [
