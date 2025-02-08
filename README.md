@@ -1,38 +1,72 @@
-# quran-learning-app
-```md
-# Kur’an Öğrenme Uygulaması
+📌 Güncellenmiş README.md İçeriği
+md
+Kopyala
+Düzenle
+# 📖 Quran Learning App 🚀  
 
-Bu proje, Kur’an öğrenmeyi ve ezber yapmayı kolaylaştırmak için geliştirilmiş bir web ve mobil uygulamasıdır.
+Bu proje, **Kur’an öğrenimini kolaylaştıran bir web uygulamasıdır.**  
+**Django Rest Framework** ile geliştirilen bir **backend API** içerir.  
 
-## 📌 Özellikler
-- **Kur’an Okuma Modülü**: Sure ve ayet bazlı okuma
-- **Ezber Takibi**: Kullanıcının ilerlemesini kaydetmesi
-- **Tecvit Kuralları**: Renk kodlamaları ve sesli rehber
-- **Sesli Okuma Desteği**: Kullanıcının telaffuz analizini yapma
+## 📌 Özellikler  
+✅ **Kullanıcı Yetkilendirme (JWT Authentication)**  
+✅ **Kullanıcı Profili & Yetkilendirme Sistemi**  
+✅ **Admin Panelinden Sure Yönetimi**  
+✅ **API ile Sure Verilerini Çekme**  
+✅ **Arapça Metin, Türkçe Meal ve Okunuş Bilgisi İçeren Sure Modeli**  
+✅ **RESTful API ile JSON Formatında Veri Sağlama**  
 
-## 🛠️ Kullanılan Teknolojiler
-- **Frontend:** React.js / Next.js (PWA uyumlu)
-- **Backend:** Django REST Framework (API)
-- **Veritabanı:** PostgreSQL
-- **Mobil:** React Native
-- **Ses Analizi:** OpenAI Whisper API / TensorFlow
+## 📌 Kurulum  
 
-## 📌 Kurulum
-Projeyi çalıştırmak için:
-
-1. Depoyu klonla:
-   ```bash
-   git clone https://github.com/kullanici-adin/quran-learning-app.git
-   ```
-2. Backend kurulumunu yap:
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   python manage.py runserver
-   ```
-3. Frontend başlat:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+### **1. Projeyi Klonla**  
+```bash
+git clone https://github.com/saitsabuncu/quran-learning-app.git
+cd quran-learning-app/backend
+2. Sanal Ortamı Oluştur ve Aktifleştir
+bash
+Kopyala
+Düzenle
+python -m venv ql
+source ql/bin/activate  # Mac/Linux
+ql\Scripts\activate  # Windows
+3. Bağımlılıkları Yükle
+bash
+Kopyala
+Düzenle
+pip install -r requirements.txt
+4. Veritabanını Güncelle ve Admin Kullanıcısı Oluştur
+bash
+Kopyala
+Düzenle
+python manage.py migrate
+python manage.py createsuperuser
+5. Sunucuyu Çalıştır
+bash
+Kopyala
+Düzenle
+python manage.py runserver
+📌 API Kullanımı
+1. Kullanıcı Kayıt Olma
+bash
+Kopyala
+Düzenle
+POST http://127.0.0.1:8000/api/register/
+2. Kullanıcı Giriş Yapma (JWT Token Alma)
+bash
+Kopyala
+Düzenle
+POST http://127.0.0.1:8000/api/login/
+3. Kullanıcı Profili Görüntüleme (Giriş Yapmış Kullanıcılar İçin)
+bash
+Kopyala
+Düzenle
+GET http://127.0.0.1:8000/api/profile/
+4. Tüm Sureleri Çekme
+bash
+Kopyala
+Düzenle
+GET http://127.0.0.1:8000/api/surahs/
+📌 Gelecek Özellikler
+✅ Ezber Takip Sistemi
+✅ Yetkilendirme Seviyelerini Genişletme
+✅ Frontend (React/Next.js) Entegrasyonu
+🚀 Bu projeyi geliştirmek için katkıda bulunabilirsin!
