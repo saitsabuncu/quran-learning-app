@@ -26,7 +26,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 def quran_surahs(request):
     if not request.user.is_authenticated:
         return JsonResponse({"error": "Yetkisiz erişim!"}, status=403)
-    surahs = Surah.objects.all().values("id", "number", "name", "verses")
+    surahs = Surah.objects.all().values("id", "number", "name", "verses", "arabic_text", "turkish_translation", "pronunciation")
     return JsonResponse(list(surahs), safe=False)
 
 def register_page(request):
