@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 
 class CustomUser(AbstractUser):
     email=models.EmailField(unique=True) # Kullanıcı girişini email ile yapacağız
@@ -16,4 +17,15 @@ class Surah(models.Model):
     pronunciation = models.TextField(blank=True, null=True)  # Okunuş
 
     def __str__(self):
-        return f"{self.number} - {self.name}"    
+        return f"{self.number} - {self.name}"  
+
+class MemorizedSurah(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Kullanıcı
+    surah = models.ForeignKey(Surah, on_delete=models.CASCADE)  # Ezberlenen sure
+    memorized_at = models.DateTimeField(auto_now_add=True)  # Ezberleme tarihi
+
+    class Meta:
+        unique_together = ("user", "surah")  # Aynı sureyi iki kez eklemeyi engelle
+
+    def __str__(self):
+        return f"{self.user.username} - {self.surah.name}"          
