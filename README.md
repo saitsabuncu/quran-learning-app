@@ -18,48 +18,32 @@ Bu proje, **Kur’an öğrenimini kolaylaştıran bir web uygulamasıdır.**
 git clone https://github.com/saitsabuncu/quran-learning-app.git
 cd quran-learning-app/backend
 2. Sanal Ortamı Oluştur ve Aktifleştir
-bash
-Kopyala
-Düzenle
+```bash
 python -m venv ql
 source ql/bin/activate  # Mac/Linux
 ql\Scripts\activate  # Windows
 3. Bağımlılıkları Yükle
-bash
-Kopyala
-Düzenle
+```bash
 pip install -r requirements.txt
 4. Veritabanını Güncelle ve Admin Kullanıcısı Oluştur
-bash
-Kopyala
-Düzenle
+```bash
 python manage.py migrate
 python manage.py createsuperuser
 5. Sunucuyu Çalıştır
-bash
-Kopyala
-Düzenle
+```bash
 python manage.py runserver
 📌 API Kullanımı
 1. Kullanıcı Kayıt Olma
-bash
-Kopyala
-Düzenle
+```bash
 POST http://127.0.0.1:8000/api/register/
 2. Kullanıcı Giriş Yapma (JWT Token Alma)
-bash
-Kopyala
-Düzenle
+```bash
 POST http://127.0.0.1:8000/api/login/
 3. Kullanıcı Profili Görüntüleme (Giriş Yapmış Kullanıcılar İçin)
-bash
-Kopyala
-Düzenle
+```bash
 GET http://127.0.0.1:8000/api/profile/
 4. Tüm Sureleri Çekme
-bash
-Kopyala
-Düzenle
+```bash
 GET http://127.0.0.1:8000/api/surahs/
 📌 Gelecek Özellikler
 ✅ Ezber Takip Sistemi
