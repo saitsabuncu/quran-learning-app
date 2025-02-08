@@ -45,8 +45,4 @@ GET http://127.0.0.1:8000/api/profile/
 4. Tüm Sureleri Çekme
 ```bash
 GET http://127.0.0.1:8000/api/surahs/
-📌 Gelecek Özellikler
-✅ Ezber Takip Sistemi
-✅ Yetkilendirme Seviyelerini Genişletme
-✅ Frontend (React/Next.js) Entegrasyonu
-🚀 Bu projeyi geliştirmek için katkıda bulunabilirsin!
+
