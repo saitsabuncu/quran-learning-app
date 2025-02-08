@@ -1,7 +1,3 @@
-📌 Güncellenmiş README.md İçeriği
-md
-Kopyala
-Düzenle
 # 📖 Quran Learning App 🚀  
 
 Bu proje, **Kur’an öğrenimini kolaylaştıran bir web uygulamasıdır.**  
