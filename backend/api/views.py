@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 
+
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
@@ -71,3 +72,36 @@ class AdminOnlyView(APIView):
             return Response({"error": "Yetkiniz yok!"}, status=403)
 
         return Response({"message": "Admin paneline hoş geldiniz!"})    
+    
+from .models import MemorizedSurah
+
+from rest_framework.decorators import api_view, permission_classes
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def mark_memorized(request):
+    user = request.user
+    surah_id = request.data.get("surah_id")
+
+    if not surah_id:
+        return Response({"error": "Sure ID belirtilmelidir."}, status=400)
+
+    surah = Surah.objects.filter(id=surah_id).first()
+    if not surah:
+        return Response({"error": "Sure bulunamadı."}, status=404)
+
+    memorized, created = MemorizedSurah.objects.get_or_create(user=user, surah=surah)
+    
+    if created:
+        return Response({"message": f"{surah.name} ezberlendi!"})
+    else:
+        return Response({"message": f"{surah.name} zaten ezberlenmiş."})
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_memorized_surahs(request):
+    user = request.user
+    memorized_surahs = MemorizedSurah.objects.filter(user=user).select_related("surah")
+    data = [{"id": ms.surah.id, "name": ms.surah.name, "memorized_at": ms.memorized_at} for ms in memorized_surahs]
+    return Response(data)
