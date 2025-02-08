@@ -8,6 +8,10 @@ from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from .models import Surah
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.contrib.auth.models import User
 
 User = get_user_model()
 
@@ -20,6 +24,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 def quran_surahs(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Yetkisiz erişim!"}, status=403)
     surahs = Surah.objects.all().values("id", "number", "name", "verses")
     return JsonResponse(list(surahs), safe=False)
 
@@ -49,3 +55,19 @@ def logout_page(request):
     logout(request)
     return redirect("login_page")  # Çıkış yaptıktan sonra login sayfasına yönlendir
 
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]  # Kullanıcı giriş yapmadan erişemesin
+
+    def get(self, request):
+        user = request.user
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data)
+    
+class AdminOnlyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if not request.user.is_staff:
+            return Response({"error": "Yetkiniz yok!"}, status=403)
+
+        return Response({"message": "Admin paneline hoş geldiniz!"})    
