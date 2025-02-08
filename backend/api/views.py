@@ -7,12 +7,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomUserSerializer, CustomTokenObtainPairSerializer
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-from .models import Surah
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
-
+from .models import MemorizedSurah, Surah
+from rest_framework.decorators import api_view, permission_classes
 
 User = get_user_model()
 
@@ -73,14 +73,14 @@ class AdminOnlyView(APIView):
 
         return Response({"message": "Admin paneline hoş geldiniz!"})    
     
-from .models import MemorizedSurah
 
-from rest_framework.decorators import api_view, permission_classes
+
+
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def mark_memorized(request):
+@permission_classes([IsAuthenticated])  # Kullanıcı giriş yapmalı
+def memorize_surah(request):
     user = request.user
     surah_id = request.data.get("surah_id")
 
@@ -92,16 +92,33 @@ def mark_memorized(request):
         return Response({"error": "Sure bulunamadı."}, status=404)
 
     memorized, created = MemorizedSurah.objects.get_or_create(user=user, surah=surah)
-    
+
     if created:
         return Response({"message": f"{surah.name} ezberlendi!"})
     else:
         return Response({"message": f"{surah.name} zaten ezberlenmiş."})
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])  # Kullanıcı giriş yapmalı
 def get_memorized_surahs(request):
     user = request.user
     memorized_surahs = MemorizedSurah.objects.filter(user=user).select_related("surah")
     data = [{"id": ms.surah.id, "name": ms.surah.name, "memorized_at": ms.memorized_at} for ms in memorized_surahs]
     return Response(data)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])  # Kullanıcı giriş yapmalı
+def unmemorize_surah(request):
+    user = request.user
+    surah_id = request.data.get("surah_id")
+
+    if not surah_id:
+        return Response({"error": "Sure ID belirtilmelidir."}, status=400)
+
+    memorized = MemorizedSurah.objects.filter(user=user, surah_id=surah_id).first()
+    
+    if not memorized:
+        return Response({"error": "Ezberlenmiş sure bulunamadı."}, status=404)
+
+    memorized.delete()
+    return Response({"message": "Sure ezberden kaldırıldı!"})
