@@ -99,7 +99,12 @@ def memorize_surah(request):
 def get_memorized_surahs(request):
     user = request.user
     memorized_surahs = MemorizedSurah.objects.filter(user=user).select_related("surah")
-    data = [{"id": ms.surah.id, "name": ms.surah.name, "memorized_at": ms.memorized_at} for ms in memorized_surahs]
+    data = [{"id": ms.surah.id, 
+             "name": ms.surah.name, 
+             "memorized_at": ms.memorized_at.strftime("%Y-%m-%d %H:%M:%S") # Tarihi okunabilir formatta gönder
+             } 
+             for ms in memorized_surahs
+             ]
     return Response(data)
 
 @api_view(["DELETE"])
