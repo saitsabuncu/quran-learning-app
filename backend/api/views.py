@@ -13,6 +13,8 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from .models import MemorizedSurah, Surah
 from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 
@@ -124,3 +126,17 @@ def unmemorize_surah(request):
     memorized.delete()
     return Response({"message": "Sure ezberden kaldırıldı!"})
 
+@login_required
+def memorized_surahs_view(request):
+    memorized_surahs = MemorizedSurah.objects.filter(user=request.user).select_related("surah")
+    return render(request, "api/memorized_surahs.html", {"memorized_surahs": memorized_surahs})
+
+@csrf_exempt
+@login_required
+def unmemorize_surah_view(request, surah_id):
+    if request.method == "POST":
+        memorized = MemorizedSurah.objects.filter(user=request.user, surah_id=surah_id).first()
+        if memorized:
+            memorized.delete()
+            return redirect("get_memorized_surahs")  # 🚀 Burada yönlendirme yapıyoruz
+    return redirect("get_memorized_surahs")  # 🚀 Eğer sure bulunmazsa yine listeye yönlendirme

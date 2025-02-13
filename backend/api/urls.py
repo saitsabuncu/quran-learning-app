@@ -5,8 +5,8 @@ from .views import quran_surahs
 from .views import register_page, login_page, logout_page
 from .views import UserProfileView
 from .views import AdminOnlyView
+from .views import memorized_surahs_view, unmemorize_surah_view, memorize_surah, get_memorized_surahs, unmemorize_surah
 
-from .views import memorize_surah, get_memorized_surahs, unmemorize_surah
 
 urlpatterns = [
     path('surahs/', quran_surahs, name="quran_surahs"),
@@ -19,6 +19,9 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name="profile"),
     path('admin-panel/', AdminOnlyView.as_view(), name="admin_panel"),
     path('memorize/', memorize_surah, name="memorize_surah"),
-    path('memorized-surahs/', get_memorized_surahs, name="get_memorized_surahs"),
     path('unmemorize/', unmemorize_surah, name="unmemorize_surah"),
+    
+    path("memorized-surahs/", get_memorized_surahs, name="get_memorized_surahs"),
+    path("unmemorize-surah/<int:surah_id>/", unmemorize_surah_view, name="unmemorize_surah"),
+
 ]
