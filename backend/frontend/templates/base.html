@@ -7,25 +7,26 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="/">Ana Sayfa</a></li>
-            <li><a href="/memorized-surahs/">Ezberlenen Sureler</a></li>
-            <li>
+    <nav style="background-color: #007BFF; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 20px;">
+                <li><a href="/" style="color: white; text-decoration: none; font-weight: bold;">Ana Sayfa</a></li>
+                <li><a href="/memorized-surahs/" style="color: white; text-decoration: none; font-weight: bold;">Ezberlenen Sureler</a></li>
+            </ul>
+        </div>
+        <div>
+            {% if user.is_authenticated %}
                 <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit">Çıkış Yap</button>
+                    <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Çıkış Yap</button>
                 </form>
-            </li>
-            <li>
-                <form action="{% url 'login_page' %}" method="get" style="display: inline;">
-                    <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Giriş Yap</button>
-                </form>
-            </li>
-        </ul>
+            {% else %}
+                <a href="{% url 'login_page' %}" style="background-color: green; color: white; text-decoration: none; padding: 5px 10px; border-radius: 5px;">Giriş Yap</a>
+            {% endif %}
+        </div>
     </nav>
 
-    <div class="content">
+    <div class="content" style="padding: 20px;">
         {% block content %}
         {% endblock %}
     </div>
