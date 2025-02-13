@@ -130,17 +130,15 @@ def unmemorize_surah(request):
 
 @login_required
 def memorized_surahs_view(request):
-    memorized_surahs = MemorizedSurah.objects.filter(user=request.user).select_related("surah")
-    memorized_pages = MemorizedPage.objects.filter(user=request.user).select_related("surah")  # 🆕 Sayfalar da eklendi!
+    memorized_surahs = MemorizedSurah.objects.filter(user=request.user).select_related('surah')
+    memorized_pages = MemorizedPage.objects.filter(user=request.user).select_related('surah')
 
-    return render(
-        request,
-        "api/memorized_surahs.html",
-        {
-            "memorized_surahs": memorized_surahs,
-            "memorized_pages": memorized_pages,  # 🆕 Frontend'de kullanacağız!
-        }
-    )
+    context = {
+        'memorized_surahs': memorized_surahs,
+        'memorized_pages': memorized_pages,
+    }
+
+    return render(request, 'api/memorized_surahs.html', context)
 
 @csrf_exempt
 @login_required

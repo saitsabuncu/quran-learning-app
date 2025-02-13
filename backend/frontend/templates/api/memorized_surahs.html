@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Ezberlenen Sureler</h2>
+
+{% if memorized_surahs %}
+    <ul>
+        {% for surah in memorized_surahs %}
+            <li>
+                {{ surah.surah.name }} - Ezberlenme Tarihi: {{ surah.memorized_at }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Henüz ezberlenmiş bir sure yok.</p>
+{% endif %}
+
+<h2>Ezberlenen Sayfalar</h2>
+
+{% if memorized_pages %}
+    <ul>
+        {% for page in memorized_pages %}
+            <li>
+                {{ page.surah.name }} - Sayfa: {{ page.page_number }} - Ezberlenme Tarihi: {{ page.memorized_at }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Henüz ezberlenmiş bir sayfa yok.</p>
+{% endif %}
+{% endblock %}

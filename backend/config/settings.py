@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Diğer uygulamalar...
+    'django_extensions',  # 👈 Bunu ekle
 
     # Üçüncü taraf paketler
     'rest_framework',
