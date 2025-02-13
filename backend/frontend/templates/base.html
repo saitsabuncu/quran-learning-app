@@ -16,7 +16,7 @@
         </div>
         <div>
             {% if user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                <form action="{% url 'logout_page' %}" method="post" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Çıkış Yap</button>
                 </form>
