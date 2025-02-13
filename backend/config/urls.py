@@ -24,12 +24,12 @@ urlpatterns = [
     path('api/', include('api.urls')),  # API yollarını dahil et
     path('', TemplateView.as_view(template_name="index.html"), name='home'),
     path('memorized-surahs/', TemplateView.as_view(template_name="memorized_surahs.html"), name='memorized_surahs'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # 👈 Eklendi
-    path('', include('django.contrib.auth.urls')),  # Otomatik auth yolları için
+    path('login/', auth_views.LoginView.as_view(), name='login_page'),  # 👈 Django Login View
+    path('logout/', auth_views.LogoutView.as_view(), name='logout_page'),  # 👈 Django Logout View
 ]
+
 from django.conf import settings
 from django.conf.urls.static import static
 
-# Statik dosyaları serve et
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

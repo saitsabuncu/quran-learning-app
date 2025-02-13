@@ -140,6 +140,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "frontend", "staticfiles")
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # REST Framework ayarları
 REST_FRAMEWORK = {
