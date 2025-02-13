@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Ezberlenen Sureler</h2>
+
+{% if memorized_surahs %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sure Adı</th>
+                <th>Ezberlenme Tarihi</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for surah in memorized_surahs %}
+            <tr>
+                <td>{{ surah.id }}</td>
+                <td>{{ surah.name }}</td>
+                <td>{{ surah.memorized_at }}</td>
+                <td>
+                    <form action="/api/unmemorize-surah/{{ surah.id }}/" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Sil</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Henüz ezberlenmiş bir sure yok.</p>
+{% endif %}
+{% endblock %}
