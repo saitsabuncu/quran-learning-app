@@ -1,12 +1,13 @@
 from django.urls import path
+from .views import (
+    memorized_surahs_view, memorize_page, unmemorize_page,
+    RegisterView, CustomTokenObtainPairView, quran_surahs, 
+    register_page, login_page, logout_page, UserProfileView, 
+    AdminOnlyView, memorized_surahs_view, unmemorize_surah_view, 
+    memorize_surah, get_memorized_surahs, unmemorize_surah, 
+    get_memorized_pages
+)
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import RegisterView, CustomTokenObtainPairView
-from .views import quran_surahs
-from .views import register_page, login_page, logout_page
-from .views import UserProfileView
-from .views import AdminOnlyView
-from .views import memorized_surahs_view, unmemorize_surah_view, memorize_surah, get_memorized_surahs, unmemorize_surah
-
 
 urlpatterns = [
     path('surahs/', quran_surahs, name="quran_surahs"),
@@ -21,7 +22,11 @@ urlpatterns = [
     path('memorize/', memorize_surah, name="memorize_surah"),
     path('unmemorize/', unmemorize_surah, name="unmemorize_surah"),
     
-    path("memorized-surahs/", get_memorized_surahs, name="get_memorized_surahs"),
-    path("unmemorize-surah/<int:surah_id>/", unmemorize_surah_view, name="unmemorize_surah"),
-
+    # Ezberlenen sureler ve sayfalar
+    path("memorized-surahs/", memorized_surahs_view, name="memorized_surahs"),
+    path("memorized-pages/", get_memorized_pages, name="get_memorized_pages"),
+    
+    # Ezberlenen sayfa ekleme ve silme
+    path("memorize-page/", memorize_page, name="memorize_page"),
+    path("unmemorize-page/<int:page_id>/", unmemorize_page, name="unmemorize_page"),
 ]

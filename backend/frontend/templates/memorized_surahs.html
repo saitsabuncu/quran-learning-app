@@ -5,31 +5,56 @@
 
 {% if memorized_surahs %}
     <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Sure Adı</th>
-                <th>Ezberlenme Tarihi</th>
-                <th>Sil</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for surah in memorized_surahs %}
-            <tr>
-                <td>{{ surah.id }}</td>
-                <td>{{ surah.name }}</td>
-                <td>{{ surah.memorized_at }}</td>
-                <td>
-                    <form action="/api/unmemorize-surah/{{ surah.id }}/" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Sil</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <tr>
+            <th>Sure ID</th>
+            <th>Sure Adı</th>
+            <th>Ezberlenme Tarihi</th>
+            <th>Sil</th>
+        </tr>
+        {% for surah in memorized_surahs %}
+        <tr>
+            <td>{{ surah.surah.id }}</td>
+            <td>{{ surah.surah.name }}</td>
+            <td>{{ surah.memorized_at }}</td>
+            <td>
+                <form method="POST" action="{% url 'unmemorize_surah' surah.surah.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Sil</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 {% else %}
     <p>Henüz ezberlenmiş bir sure yok.</p>
 {% endif %}
+
+<h2>Ezberlenen Sayfalar</h2>
+
+{% if memorized_pages %}
+    <table border="1">
+        <tr>
+            <th>Sure Adı</th>
+            <th>Sayfa Numarası</th>
+            <th>Ezberlenme Tarihi</th>
+            <th>Sil</th>
+        </tr>
+        {% for page in memorized_pages %}
+        <tr>
+            <td>{{ page.surah.name }}</td>
+            <td>{{ page.page_number }}</td>
+            <td>{{ page.memorized_at }}</td>
+            <td>
+                <form method="POST" action="{% url 'unmemorize_page' page.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Sil</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Henüz ezberlenmiş bir sayfa yok.</p>
+{% endif %}
+
 {% endblock %}

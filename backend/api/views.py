@@ -1,3 +1,4 @@
+from .models import MemorizedPage  # Eğer bu model varsa ekle
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from rest_framework import generics
@@ -15,6 +16,7 @@ from .models import MemorizedSurah, Surah
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from .models import MemorizedPage
 
 User = get_user_model()
 
@@ -129,7 +131,16 @@ def unmemorize_surah(request):
 @login_required
 def memorized_surahs_view(request):
     memorized_surahs = MemorizedSurah.objects.filter(user=request.user).select_related("surah")
-    return render(request, "api/memorized_surahs.html", {"memorized_surahs": memorized_surahs})
+    memorized_pages = MemorizedPage.objects.filter(user=request.user).select_related("surah")  # 🆕 Sayfalar da eklendi!
+
+    return render(
+        request,
+        "api/memorized_surahs.html",
+        {
+            "memorized_surahs": memorized_surahs,
+            "memorized_pages": memorized_pages,  # 🆕 Frontend'de kullanacağız!
+        }
+    )
 
 @csrf_exempt
 @login_required
@@ -140,3 +151,53 @@ def unmemorize_surah_view(request, surah_id):
             memorized.delete()
             return redirect("get_memorized_surahs")  # 🚀 Burada yönlendirme yapıyoruz
     return redirect("get_memorized_surahs")  # 🚀 Eğer sure bulunmazsa yine listeye yönlendirme
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def memorize_page(request):
+    user = request.user
+    surah_id = request.data.get('surah_id')
+    page_number = request.data.get('page_number')
+
+    if not surah_id or not page_number:
+        return Response({'error': 'Sure ID ve sayfa numarası gereklidir.'}, status=400)
+
+    surah = Surah.objects.filter(id=surah_id).first()
+    if not surah:
+        return Response({'error': 'Sure bulunamadı.'}, status=404)
+
+    page, created = MemorizedPage.objects.get_or_create(user=user, surah=surah, page_number=page_number)
+
+    if created:
+        return Response({'message': f"{surah.name} suresinin {page_number}. sayfası ezberlendi!"})
+    else:
+        return Response({'message': f"{surah.name} suresinin {page_number}. sayfası zaten ezberlenmiş."})
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_memorized_pages(request):
+    user = request.user
+    memorized_pages = MemorizedPage.objects.filter(user=user).select_related("surah")
+
+    data = [
+        {
+            "surah_name": page.surah.name,
+            "page_number": page.page_number,
+            "memorized_at": page.memorized_at.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        for page in memorized_pages
+    ]
+
+    return Response(data)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def unmemorize_page(request, page_id):
+    user = request.user
+    memorized_page = MemorizedPage.objects.filter(user=user, id=page_id).first()
+
+    if not memorized_page:
+        return Response({"error": "Ezberlenmiş sayfa bulunamadı."}, status=404)
+
+    memorized_page.delete()
+    return Response({"message": "Sayfa ezberden kaldırıldı!"})

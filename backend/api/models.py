@@ -28,4 +28,17 @@ class MemorizedSurah(models.Model):
         unique_together = ("user", "surah")  # Aynı sureyi iki kez eklemeyi engelle
 
     def __str__(self):
-        return f"{self.user.username} - {self.surah.name}"          
+        return f"{self.user.username} - {self.surah.name}"    
+
+class MemorizedPage(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    surah = models.ForeignKey(Surah, on_delete=models.CASCADE)
+    page_number = models.IntegerField()
+    memorized_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'surah', 'page_number')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.surah.name} - Sayfa {self.page_number}"
+
