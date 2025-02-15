@@ -1,4 +1,3 @@
-```markdown
 # Quran Learning App
 
 Quran Learning App, kullanıcıların Kur'an-ı Kerim'i daha etkili bir şekilde ezberlemelerine yardımcı olmak amacıyla geliştirilmiş bir web uygulamasıdır. Bu uygulama, ezberlenen sureleri ve sayfaları takip etmenize, ezberleme ilerlemenizi yönetmenize olanak tanır.
