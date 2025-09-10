@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api import views  # 👈 API views import edilmeli
+
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
