@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     # Üçüncü taraf paketler
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'django_cors_headers',
+    'corsheaders',
 
 
     # Kendi uygulamalarımız
