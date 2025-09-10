@@ -38,15 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     
     # Diğer uygulamalar...
     'django_extensions',  # 👈 Bunu ekle
 
     # Üçüncü taraf paketler
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    'django_cors_headers',
+
 
     # Kendi uygulamalarımız
-    'api',
+    
+    'users',
+
 ]
 
 
@@ -133,7 +140,7 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'api.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Kullanıcı için özel statik dosyalar (senin elinle koyduğun dosyalar)
 STATICFILES_DIRS = [
@@ -153,6 +160,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
