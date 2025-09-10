@@ -19,18 +19,22 @@ from django.urls import path, include
 
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # JWT ve user API
+    path('api/', include('users.urls')),
     
     path('', TemplateView.as_view(template_name="index.html"), name='home'),
     
-    path('login/', auth_views.LoginView.as_view(), name='login_page'),  # 👈 Django Login View
-    path('logout/', auth_views.LogoutView.as_view(), name='logout_page'),  # 👈 Django Logout View
-]
+    # Django'nun klasik login/logout sayfaları (şimdilik opsiyonel)
+    path('login/', auth_views.LoginView.as_view(), name='login_page'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout_page'),]
 
-from django.conf import settings
-from django.conf.urls.static import static
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
