@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Kendi uygulamalarımız
     
     'users',
+    'surahs',
 
 ]
 

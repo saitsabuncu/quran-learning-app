@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Surah, Ayet
 
-# Register your models here.
+admin.site.register(Surah)
+admin.site.register(Ayet)
