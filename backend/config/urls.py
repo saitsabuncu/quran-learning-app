@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from django.views.generic import TemplateView
-from django.contrib.auth import views as auth_views
+
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,6 +28,7 @@ urlpatterns = [
     # JWT ve user API
     path('api/', include('users.urls')),
     path('api/', include('surahs.urls')),
+    path('api/', include('memorization.urls')),
     
     path('', TemplateView.as_view(template_name="index.html"), name='home'),
 ]
