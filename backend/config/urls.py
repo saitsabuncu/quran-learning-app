@@ -27,12 +27,11 @@ urlpatterns = [
 
     # JWT ve user API
     path('api/', include('users.urls')),
+    path('api/', include('surahs.urls')),
     
     path('', TemplateView.as_view(template_name="index.html"), name='home'),
-    
-    # Django'nun klasik login/logout sayfaları (şimdilik opsiyonel)
-    path('login/', auth_views.LoginView.as_view(), name='login_page'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout_page'),]
+]
+
 
 
 
