@@ -1,0 +1,20 @@
+from rest_framework import serializers
+from .models import AudioSubmission
+from surahs.models import Ayet
+
+class AyetMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ayet
+        fields = ['id', 'number', 'text_ar', 'text_tr']
+
+class AudioSubmissionSerializer(serializers.ModelSerializer):
+    ayet = AyetMiniSerializer(read_only=True)
+
+    class Meta:
+        model = AudioSubmission
+        fields = ['id', 'ayet', 'audio_file', 'uploaded_at', 'is_checked', 'notes']
+
+class AudioUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AudioSubmission
+        fields = ['ayet', 'audio_file', 'notes']
