@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/', include('surahs.urls')),
     path('api/', include('memorization.urls')),
     
-    path('', TemplateView.as_view(template_name="index.html"), name='home'),
+    #path('', TemplateView.as_view(template_name="index.html"), name='home'),
 ]
 
 
