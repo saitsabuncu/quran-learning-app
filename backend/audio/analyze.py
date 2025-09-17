@@ -13,8 +13,9 @@ def analyze_audio_submission(audio_path, expected_text):
         "predicted": predicted_text,
         "similarity": round(similarity * 100, 2)
     }
-result = analyze_audio_submission(
-    r"C:\Projeler\quran-learning-app\backend\media\audio\fatiha_ayet1.mp3",
-    "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
-)
-print(result)
+if __name__ == "__main__":
+    result = analyze_audio_submission(
+        r"C:\Projeler\quran-learning-app\backend\media\audio\fatiha_ayet1.mp3",
+        "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
+    )
+    print(result)
