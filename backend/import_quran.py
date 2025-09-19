@@ -8,19 +8,23 @@ django.setup()
 
 from surahs.models import Surah, Ayet
 
-with open("backend/quran.json", "r", encoding="utf-8") as f:
+with open("backend/data/quran-uthmani.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
-for item in data:
-    surah_id = item["surah"]
-    number = item["ayah"]
-    text_ar = item["text_ar"]
+# Tanzil JSON formatı: data → surahs → ayahs
+for surah in data["data"]["surahs"]:
+    surah_id = surah["number"]          # Sure numarası
+    for ayah in surah["ayahs"]:
+        number = ayah["numberInSurah"]  # Ayetin sure içindeki numarası
+        text_ar = ayah["text"]          # Ayetin Arapça metni
 
-    surah = Surah.objects.get(id=surah_id)  # senin admin panelden eklediğin sure kaydı
-    Ayet.objects.get_or_create(
-        surah=surah,
-        number=number,
-        defaults={"text_ar": text_ar}
-    )
+        # Senin admin panelinde girdiğin Surah kaydı ile eşleştiriyoruz
+        surah_obj = Surah.objects.get(id=surah_id)
+
+        Ayet.objects.get_or_create(
+            surah=surah_obj,
+            number=number,
+            defaults={"text_ar": text_ar}
+        )
 
 print("✅ Ayetler başarıyla import edildi.")
