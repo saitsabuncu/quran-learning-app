@@ -93,7 +93,9 @@ class MemorizationStatsCompactView(APIView):
         for surah in surahs:
             surah_total = Ayet.objects.filter(surah=surah).count()
             surah_memorized = MemorizedAyet.objects.filter(user=user, ayet__surah=surah).count()
-            if surah_memorized == 0:  # 👈 ezber yapılmamış sureyi atla
+            
+            # 👈 ezber yapılmamış sureyi atla
+            if surah_memorized == 0:  
                 continue
             percentage = (surah_memorized / surah_total * 100) if surah_total > 0 else 0
 
