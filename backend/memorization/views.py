@@ -57,7 +57,7 @@ class MemorizationStatsView(APIView):
         # Avoid division by zero
         overall_percentage = (memorized_ayets / total_ayets * 100) if total_ayets > 0 else 0
         surah_stats = []
-        
+
         #Sıralama eklendi
         surahs = Surah.objects.all().order_by("id")
 
@@ -80,3 +80,31 @@ class MemorizationStatsView(APIView):
             "overall_percentage": round(overall_percentage, 2),
             "by_surah": surah_stats
         })    
+
+class MemorizationStatsCompactView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        surah_stats = []
+        surahs = Surah.objects.all().order_by("id")
+
+        for surah in surahs:
+            surah_total = Ayet.objects.filter(surah=surah).count()
+            surah_memorized = MemorizedAyet.objects.filter(user=user, ayet__surah=surah).count()
+            if surah_memorized == 0:  # 👈 ezber yapılmamış sureyi atla
+                continue
+            percentage = (surah_memorized / surah_total * 100) if surah_total > 0 else 0
+
+            surah_stats.append({
+                "surah_id": surah.id,
+                "surah_name": surah.name,
+                "memorized": surah_memorized,
+                "total": surah_total,
+                "percentage": round(percentage, 2)
+            })
+
+        return Response({
+            "by_surah": surah_stats
+        })
