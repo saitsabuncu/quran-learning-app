@@ -53,7 +53,7 @@ class AudioFeedbackView(generics.UpdateAPIView):
 class AudioAnalyzeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, pk):
+    def post(self, request, pk, format=None):  # 👈 format parametresi eklendi
         try:
             submission = AudioSubmission.objects.get(pk=pk, user=request.user)
         except AudioSubmission.DoesNotExist:
@@ -65,6 +65,6 @@ class AudioAnalyzeView(APIView):
 
         result = analyze_audio_submission(audio_path, expected_text)
 
-        # Optional: Save results in DB later if you want
         return Response(result, status=status.HTTP_200_OK)
+
 
