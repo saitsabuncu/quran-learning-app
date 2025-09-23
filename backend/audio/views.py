@@ -1,3 +1,5 @@
+import whisper
+from difflib import SequenceMatcher
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status
@@ -5,6 +7,20 @@ from .models import AudioSubmission
 from rest_framework.exceptions import PermissionDenied
 from .serializers import AudioSubmissionSerializer, AudioUploadSerializer
 from .analyze import analyze_audio_submission
+
+# Load Whisper model once (not every request)
+model = whisper.load_model("base")
+
+def analyze_audio_submission(audio_path, expected_text):
+    result = model.transcribe(audio_path, language="ar")
+    predicted_text = result['text'].strip()
+    similarity = SequenceMatcher(None, expected_text, predicted_text).ratio()
+
+    return {
+        "expected": expected_text,
+        "predicted": predicted_text,
+        "similarity": round(similarity * 100, 2)
+    }
 
 # Kullanıcının kendi kayıtlarını listeleme
 class AudioSubmissionListView(generics.ListAPIView):
@@ -33,6 +49,7 @@ class AudioFeedbackView(generics.UpdateAPIView):
             raise PermissionDenied("Sadece admin kullanıcılar düzenleyebilir.")
         return super().update(request, *args, **kwargs) 
 
+
 class AudioAnalyzeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -40,13 +57,14 @@ class AudioAnalyzeView(APIView):
         try:
             submission = AudioSubmission.objects.get(pk=pk, user=request.user)
         except AudioSubmission.DoesNotExist:
-            return Response({"detail": "Kayıt bulunamadı."}, status=status.HTTP_404_NOT_FOUND)
-        
-        # Ayet metni ve ses dosyası yolu
-        ayet_text = submission.ayet.text_ar
+            return Response({"error": "Audio submission not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        ayet = submission.ayet
         audio_path = submission.audio_file.path
+        expected_text = ayet.text_ar
 
-        # Whisper analizi
-        result = analyze_audio_submission(audio_path, ayet_text)
+        result = analyze_audio_submission(audio_path, expected_text)
 
-        return Response(result, status=status.HTTP_200_OK)           
+        # Optional: Save results in DB later if you want
+        return Response(result, status=status.HTTP_200_OK)
+
