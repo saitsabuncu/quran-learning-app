@@ -3,9 +3,10 @@ from difflib import SequenceMatcher
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status
-from .models import AudioSubmission
+from .models import AudioSubmission, AudioAnalysisResult
 from rest_framework.exceptions import PermissionDenied
 from .serializers import AudioSubmissionSerializer, AudioUploadSerializer
+from .serializers import AudioAnalysisResultSerializer
 from .analyze import analyze_audio_submission
 
 # Load Whisper model once (not every request)
@@ -63,8 +64,18 @@ class AudioAnalyzeView(APIView):
         audio_path = submission.audio_file.path
         expected_text = ayet.text_ar
 
+        # Analizi yap
         result = analyze_audio_submission(audio_path, expected_text)
 
-        return Response(result, status=status.HTTP_200_OK)
+        # DB'ye kaydet
+        analysis = AudioAnalysisResult.objects.create(
+            submission=submission,
+            expected_text=result["expected"],
+            predicted_text=result["predicted"],
+            similarity=result["similarity"],
+        )
+
+        serializer = AudioAnalysisResultSerializer(analysis)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
