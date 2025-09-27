@@ -78,4 +78,11 @@ class AudioAnalyzeView(APIView):
         serializer = AudioAnalysisResultSerializer(analysis)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class AudioAnalysisResultListView(generics.ListAPIView):
+    serializer_class = AudioAnalysisResultSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # sadece giriş yapan kullanıcının sonuçlarını göster
+        return AudioAnalysisResult.objects.filter(submission__user=self.request.user).order_by('-created_at')
 
