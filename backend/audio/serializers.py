@@ -23,4 +23,4 @@ class AudioUploadSerializer(serializers.ModelSerializer):
 class AudioAnalysisResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioAnalysisResult
-        fields = ["id", "submission", "expected_text", "predicted_text", "similarity", "created_at"]        
+        fields = ["id", "submission", "expected_text", "predicted_text", "similarity", "differences","created_at"]        

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import JSONField
 from django.contrib.auth import get_user_model
 from surahs.models import Ayet
 
@@ -22,6 +23,7 @@ class AudioAnalysisResult(models.Model):
     expected_text = models.TextField()
     predicted_text = models.TextField()
     similarity = models.FloatField()
+    differences = models.JSONField(default=list, blank=True)  # 👈 yeni alan
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

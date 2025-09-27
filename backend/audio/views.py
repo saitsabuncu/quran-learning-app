@@ -73,6 +73,7 @@ class AudioAnalyzeView(APIView):
             expected_text=result["expected"],
             predicted_text=result["predicted"],
             similarity=result["similarity"],
+            differences=result["differences"],  # 👈 ekledik
         )
 
         serializer = AudioAnalysisResultSerializer(analysis)
