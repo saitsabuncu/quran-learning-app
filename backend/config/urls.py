@@ -33,8 +33,7 @@ urlpatterns = [
     path('api/', include('tajweed.urls')),
     path('api/', include('audio.urls')),
 
-    # Ana sayfa yönlendirmesi
-    path('', lambda request: HttpResponse("API çalışıyor 🚀"), name="home"),
+
     
     #path('', TemplateView.as_view(template_name="index.html"), name='home'),
 ]
