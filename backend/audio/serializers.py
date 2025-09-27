@@ -18,7 +18,7 @@ class AudioSubmissionSerializer(serializers.ModelSerializer):
 class AudioUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioSubmission
-        fields = ['ayet', 'audio_file', 'notes']
+        fields = ['id','ayet', 'audio_file', 'notes']
 
 class AudioAnalysisResultSerializer(serializers.ModelSerializer):
     class Meta:
