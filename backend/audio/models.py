@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from surahs.models import Ayet
-from django.conf import settings
 
 User = get_user_model()
 
@@ -14,7 +13,9 @@ class AudioSubmission(models.Model):
     notes = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - Ayet {self.ayet.number} - {self.uploaded_at.strftime('%Y-%m-%d')}"
+        # Kullanıcı + Sure adı + Ayet numarası + Submission id
+        return f"{self.user.username} - {self.ayet.surah.name} {self.ayet.number} (#{self.id})"
+
 
 class AudioAnalysisResult(models.Model):
     submission = models.ForeignKey("AudioSubmission", on_delete=models.CASCADE, related_name="analyses")
@@ -24,4 +25,5 @@ class AudioAnalysisResult(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Analysis for {self.submission} - {self.similarity}%"
+        # Analiz id + submission id + benzerlik yüzdesi
+        return f"Analysis {self.id} for Submission {self.submission.id} - {self.similarity:.2f}%"
