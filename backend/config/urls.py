@@ -21,6 +21,7 @@ from django.views.generic import TemplateView
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,9 @@ urlpatterns = [
     path('api/', include('memorization.urls')),
     path('api/', include('tajweed.urls')),
     path('api/', include('audio.urls')),
+
+    # Ana sayfa yönlendirmesi
+    path('', lambda request: HttpResponse("API çalışıyor 🚀"), name="home"),
     
     #path('', TemplateView.as_view(template_name="index.html"), name='home'),
 ]
