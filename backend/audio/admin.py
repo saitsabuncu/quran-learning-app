@@ -20,9 +20,10 @@ class AudioSubmissionAdmin(admin.ModelAdmin):
 
 @admin.register(AudioAnalysisResult)
 class AudioAnalysisResultAdmin(admin.ModelAdmin):
-    list_display = ("id", "submission", "colored_similarity", "pretty_differences", "created_at")
+    list_display = ("id", "submission", "colored_similarity", "pretty_differences", "json_differences", "created_at")
     search_fields = ("expected_text", "predicted_text")
     list_filter = ("created_at", "similarity")
+    readonly_fields = ("json_differences",)  # 👈 Detay sayfasında read-only alan olarak ekliyoruz
 
     def colored_similarity(self, obj):
         if obj.similarity >= 80:
@@ -33,7 +34,6 @@ class AudioAnalysisResultAdmin(admin.ModelAdmin):
             color = "red"
         similarity_str = f"{obj.similarity:.2f}%"
         return format_html('<span style="color: {};">{}</span>', color, similarity_str)
-
     colored_similarity.short_description = "Similarity"
 
     def pretty_differences(self, obj):
@@ -41,14 +41,29 @@ class AudioAnalysisResultAdmin(admin.ModelAdmin):
             return "-"
         try:
             diffs = obj.differences
-            if isinstance(diffs, str):  # JSON string ise
+            if isinstance(diffs, str):
                 diffs = json.loads(diffs)
             return format_html_join(
                 "<br>",
                 '<span style="color:blue;">{}</span>: <span style="color:black;">{}</span>',
                 ((d["type"], d.get("expected") or d.get("predicted")) for d in diffs)
             )
-        except Exception as e:
+        except Exception:
             return str(obj.differences)
+    pretty_differences.short_description = "Differences (Pretty)"
 
-    pretty_differences.short_description = "Differences"
+    def json_differences(self, obj):
+        if not obj.differences:
+            return "-"
+        try:
+            diffs = obj.differences
+            if isinstance(diffs, str):
+                diffs = json.loads(diffs)
+            formatted = json.dumps(diffs, indent=2, ensure_ascii=False)
+            return format_html(
+                '<pre style="background-color:#f5f5f5; padding:10px; border-radius:5px; max-width:600px; white-space:pre-wrap;">{}</pre>',
+                formatted
+            )
+        except Exception:
+            return str(obj.differences)
+    json_differences.short_description = "Differences (JSON)"
