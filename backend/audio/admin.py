@@ -5,9 +5,16 @@ from .models import AudioSubmission, AudioAnalysisResult
 
 @admin.register(AudioSubmission)
 class AudioSubmissionAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "ayet", "notes", "uploaded_at")  # 👈 tabloda görünecek kolonlar
+    list_display = ("id", "user", "ayet", "notes", "uploaded_at", "checked_status")  # 👈 yeni kolon
     search_fields = ("user__username", "ayet__text_ar", "notes")   # 👈 arama çubuğu
-    list_filter = ("uploaded_at", "user")                          # 👈 sağ tarafta filtre
+    list_filter = ("uploaded_at", "user","is_checked")             # 👈 sağ tarafta filtre
+
+    def checked_status(self, obj):
+        if obj.is_checked:
+            return format_html('<span style="color: green;">✅ Checked</span>')
+        return format_html('<span style="color: red;">❌ Not Checked</span>')
+
+    checked_status.short_description = "Checked Status"
 
 @admin.register(AudioAnalysisResult)
 class AudioAnalysisResultAdmin(admin.ModelAdmin):
