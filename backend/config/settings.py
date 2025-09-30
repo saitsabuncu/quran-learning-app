@@ -147,9 +147,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # Kullanıcı için özel statik dosyalar (senin elinle koyduğun dosyalar)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "backend", "static"),
-]
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, "frontend", "static"),]
+
 # Statik kök dizini (collectstatic için)
 STATIC_ROOT = os.path.join(BASE_DIR, "frontend", "staticfiles")
 
